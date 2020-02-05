@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import com.mercadopago.android.px.core.SplitPaymentProcessor;
 import com.mercadopago.android.px.internal.callbacks.PaymentServiceHandler;
 import com.mercadopago.android.px.internal.callbacks.PaymentServiceHandlerWrapper;
+import com.mercadopago.android.px.internal.model.EscStatus;
 import com.mercadopago.android.px.internal.repository.AmountConfigurationRepository;
 import com.mercadopago.android.px.internal.repository.AmountRepository;
 import com.mercadopago.android.px.internal.repository.DisabledPaymentMethodRepository;
@@ -235,11 +236,15 @@ public class PaymentService implements PaymentRepository {
         }
     }
 
+    private boolean shouldInvalidateEsc(final String escStatus) {
+        return EscStatus.REJECTED.equals(escStatus);
+    }
+
     private void checkEscAvailability() {
         //Paying with saved card without token
         final Card card = userSelectionRepository.getCard();
 
-        if (escPaymentManager.hasEsc(card) && !card.shouldInvalidateEsc()) {
+        if (escPaymentManager.hasEsc(card) && !shouldInvalidateEsc(card.getEscStatus())) {
             //Saved card has ESC - Try to tokenize
             tokenRepository.createToken(card).enqueue(new Callback<Token>() {
                 @Override

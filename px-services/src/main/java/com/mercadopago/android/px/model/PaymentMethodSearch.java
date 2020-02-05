@@ -236,7 +236,7 @@ public class PaymentMethodSearch implements Serializable {
                 card.setFirstSixDigits(customSearchItem.getFirstSixDigits());
                 card.setLastFourDigits(customSearchItem.getLastFourDigits());
                 card.setIssuer(customSearchItem.getIssuer());
-                card.setInvalidateEsc(customSearchItem.shouldInvalidateEsc());
+                card.setEscStatus(customSearchItem.getEscStatus());
                 return card;
             }
         }

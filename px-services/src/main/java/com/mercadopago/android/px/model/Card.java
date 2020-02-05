@@ -23,7 +23,7 @@ public final class Card implements CardInformation {
     private String lastFourDigits;
     private PaymentMethod paymentMethod;
     private SecurityCode securityCode;
-    private boolean invalidateEsc;
+    private String escStatus;
 
     @Deprecated
     public Card() {
@@ -155,12 +155,12 @@ public final class Card implements CardInformation {
         return securityCode != null ? securityCode.getCardLocation() : CARD_DEFAULT_SECURITY_CODE_LOCATION;
     }
 
-    public boolean shouldInvalidateEsc() {
-        return invalidateEsc;
+    public void setEscStatus(final String status) {
+        this.escStatus = status;
     }
 
-    public void setInvalidateEsc(final boolean invalidateEsc) {
-        this.invalidateEsc = invalidateEsc;
+    public String getEscStatus() {
+        return escStatus;
     }
 
     @SuppressWarnings("ObjectToString")
@@ -179,6 +179,7 @@ public final class Card implements CardInformation {
             ", lastFourDigits='" + lastFourDigits + '\'' +
             ", paymentMethod=" + paymentMethod +
             ", securityCode=" + securityCode +
+            ", escStatus=" + escStatus +
             '}';
     }
 }

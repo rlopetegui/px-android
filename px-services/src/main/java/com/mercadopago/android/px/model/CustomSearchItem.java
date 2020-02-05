@@ -33,7 +33,7 @@ public class CustomSearchItem implements Serializable, Parcelable {
     @Nullable private String lastFourDigits;
     @Nullable private String firstSixDigits;
 
-    private boolean invalidateEsc;
+    private String escStatus;
 
     @Deprecated
     public CustomSearchItem() {
@@ -65,7 +65,7 @@ public class CustomSearchItem implements Serializable, Parcelable {
         lastFourDigits = in.readString();
         firstSixDigits = in.readString();
         issuer = in.readParcelable(Issuer.class.getClassLoader());
-        invalidateEsc = in.readByte() != 0;
+        escStatus = in.readString();
     }
 
     @Override
@@ -81,7 +81,7 @@ public class CustomSearchItem implements Serializable, Parcelable {
         dest.writeString(lastFourDigits);
         dest.writeString(firstSixDigits);
         dest.writeParcelable(issuer, 0);
-        dest.writeByte((byte) (invalidateEsc ? 1 : 0));
+        dest.writeString(escStatus);
     }
 
     public String getDescription() {
@@ -161,7 +161,11 @@ public class CustomSearchItem implements Serializable, Parcelable {
         return firstSixDigits;
     }
 
-    public boolean shouldInvalidateEsc() {
-        return invalidateEsc;
+    public String getEscStatus() {
+        return escStatus;
+    }
+
+    public void setEscStatus(final String escStatus) {
+        this.escStatus = escStatus;
     }
 }
