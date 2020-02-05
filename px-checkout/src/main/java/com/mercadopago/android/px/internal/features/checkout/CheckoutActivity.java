@@ -48,6 +48,7 @@ import static com.mercadopago.android.px.internal.features.Constants.RESULT_ERRO
 import static com.mercadopago.android.px.internal.features.Constants.RESULT_FAIL_ESC;
 import static com.mercadopago.android.px.internal.features.Constants.RESULT_PAYMENT;
 import static com.mercadopago.android.px.internal.features.Constants.RESULT_SILENT_ERROR;
+import static com.mercadopago.android.px.internal.features.express.ExpressPaymentFragment.TAG_OFFLINE_METHODS_FRAGMENT;
 import static com.mercadopago.android.px.internal.features.payment_result.PaymentResultActivity.EXTRA_RESULT_CODE;
 import static com.mercadopago.android.px.internal.util.ErrorUtil.isErrorResult;
 import static com.mercadopago.android.px.model.ExitAction.EXTRA_CLIENT_RES_CODE;
@@ -144,27 +145,33 @@ public class CheckoutActivity extends PXActivity<CheckoutPresenter>
     @Override
     public void onBackPressed() {
         final int backStackEntryCount = getSupportFragmentManager().getBackStackEntryCount();
-        final Fragment fragment = getSupportFragmentManager().getFragments().get(backStackEntryCount);
-        if (fragment instanceof BackHandler) {
-            boolean shouldHandleBack = ((BackHandler) fragment).handleBack();
-            if(!shouldHandleBack) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        if (fragmentManager != null) {
+            Fragment fragment = fragmentManager.findFragmentByTag(TAG_OFFLINE_METHODS_FRAGMENT);
+
+            if (fragment instanceof BackHandler) {
+                boolean shouldHandleBack = ((BackHandler) fragment).handleBack();
+                if (!shouldHandleBack) {
+                    return;
+                }
+            }
+
+            fragment = fragmentManager.findFragmentByTag(CardFormWithFragment.TAG);
+            if (fragment != null && fragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
+                fragment.getChildFragmentManager().popBackStack();
                 return;
             }
-        }
 
-        final Fragment cardFormFragment = getSupportFragmentManager().findFragmentByTag(CardFormWithFragment.TAG);
-        if (cardFormFragment != null && cardFormFragment.getChildFragmentManager().getBackStackEntryCount() > 0) {
-            cardFormFragment.getChildFragmentManager().popBackStack();
-            return;
-        }
-        if (getSupportFragmentManager() != null && backStackEntryCount > 0) {
-            getSupportFragmentManager().popBackStack();
-            return;
-        }
-        final ExpressPaymentFragment expressPaymentFragment = FragmentUtil
-            .getFragmentByTag(getSupportFragmentManager(), TAG_ONETAP_FRAGMENT, ExpressPaymentFragment.class);
-        if (expressPaymentFragment == null || !expressPaymentFragment.isExploding()) {
-            super.onBackPressed();
+            if (backStackEntryCount > 0) {
+                fragmentManager.popBackStack();
+                return;
+            }
+
+            fragment =
+                FragmentUtil.getFragmentByTag(fragmentManager, TAG_ONETAP_FRAGMENT, ExpressPaymentFragment.class);
+            if (fragment == null || !((ExpressPaymentFragment) fragment).isExploding()) {
+                super.onBackPressed();
+            }
         }
     }
 

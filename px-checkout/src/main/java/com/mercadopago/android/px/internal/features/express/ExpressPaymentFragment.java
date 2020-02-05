@@ -102,7 +102,7 @@ public class ExpressPaymentFragment extends Fragment implements ExpressPayment.V
     OfflineMethodsFragment.SheetHidability {
 
     private static final String TAG_EXPLODING_FRAGMENT = "TAG_EXPLODING_FRAGMENT";
-    private static final String TAG_OFFLINE_METHODS_FRAGMENT = "TAG_OFFLINE_METHODS_FRAGMENT";
+    public static final String TAG_OFFLINE_METHODS_FRAGMENT = "TAG_OFFLINE_METHODS_FRAGMENT";
     private static final String TAG_HEADER_DYNAMIC_DIALOG = "TAG_HEADER_DYNAMIC_DIALOG";
     private static final String EXTRA_RENDER_MODE = "render_mode";
     private static final int REQ_CODE_PAYMENT_PROCESSOR = 101;
@@ -780,7 +780,7 @@ public class ExpressPaymentFragment extends Fragment implements ExpressPayment.V
                 .setCustomAnimations(R.animator.px_slide_up, 0, 0, R.animator.px_slide_down)
                 .replace(R.id.off_methods_fragment, instance,
                     TAG_OFFLINE_METHODS_FRAGMENT)
-                .addToBackStack(null)
+                .addToBackStack(TAG_OFFLINE_METHODS_FRAGMENT)
                 .commit();
             instance.setTargetFragment(this, 1);
         } else {
