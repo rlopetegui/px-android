@@ -1,6 +1,7 @@
 package com.mercadopago.android.px.internal.features.express.add_new_card;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -105,7 +106,12 @@ public class OfflineMethodsFragment extends BaseFragment<OfflineMethodsPresenter
         });
         totalAmountTextView = view.findViewById(R.id.total_amount);
         final ImageView closeImage = view.findViewById(R.id.image);
-        closeImage.setOnClickListener(v -> getActivity().onBackPressed());
+        closeImage.setOnClickListener(v -> {
+            final Activity activity = getActivity();
+            if (activity != null ) {
+                activity.onBackPressed();
+            }
+        });
 
         configureRecycler(view.findViewById(R.id.methods));
 
@@ -292,10 +298,6 @@ public class OfflineMethodsFragment extends BaseFragment<OfflineMethodsPresenter
     @Override
     public boolean isExploding() {
         return FragmentUtil.isFragmentVisible(getChildFragmentManager(), TAG_EXPLODING_FRAGMENT);
-    }
-
-    public void onHideSheet() {
-
     }
 
     interface OnMethodSelectedListener {

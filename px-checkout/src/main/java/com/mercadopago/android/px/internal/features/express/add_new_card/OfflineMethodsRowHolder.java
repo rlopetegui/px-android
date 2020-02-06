@@ -17,11 +17,9 @@ import com.mercadopago.android.px.internal.view.MPTextView;
     private final MPTextView description;
     private final ImageView methodImageView;
     private final RadioButton radioButton;
-    private final ConstraintLayout container;
 
     /* default */ OfflineMethodsRowHolder(@NonNull final View itemView) {
         super(itemView);
-        container = itemView.findViewById(R.id.offline_item_container);
         paymentTypeName = itemView.findViewById(R.id.payment_type_name);
         paymentMethodName = itemView.findViewById(R.id.payment_method_name);
         description = itemView.findViewById(R.id.description);
@@ -37,14 +35,14 @@ import com.mercadopago.android.px.internal.view.MPTextView;
             description.setVisibility(View.GONE);
             methodImageView.setVisibility(View.GONE);
             radioButton.setVisibility(View.GONE);
-            container.setOnClickListener(null);
+            itemView.setOnClickListener(null);
         } else {
             paymentTypeName.setVisibility(View.GONE);
             ViewUtils.loadOrHide(View.GONE, offlineItem.getName(), paymentMethodName);
             ViewUtils.loadOrHide(View.GONE, offlineItem.getDescription(), description);
             ViewUtils.loadOrGone(offlineItem.getIconId(), methodImageView);
             radioButton.setVisibility(View.VISIBLE);
-            container.setOnClickListener(v -> onItemClicked.onClick());
+            itemView.setOnClickListener(v -> onItemClicked.onClick());
         }
     }
 
