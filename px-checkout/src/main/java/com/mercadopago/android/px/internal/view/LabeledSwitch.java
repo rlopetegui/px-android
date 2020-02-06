@@ -28,7 +28,7 @@ public class LabeledSwitch extends LinearLayoutCompat implements CompoundButton.
         super(context, attrs, defStyleAttr);
         LayoutInflater.from(context).inflate(R.layout.px_view_labeled_switch, this, true);
         setOrientation(VERTICAL);
-        label = findViewById(R.id.bottom_button_message);
+        label = findViewById(R.id.label);
         lSwitch = findViewById(R.id.lSwitch);
         lSwitch.setOnCheckedChangeListener(this);
     }

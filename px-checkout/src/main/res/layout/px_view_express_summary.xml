@@ -21,9 +21,11 @@
         <FrameLayout
             android:id="@+id/items_container"
             android:layout_width="match_parent"
+            android:clipChildren="false"
+            android:clipToPadding="false"
             android:layout_height="0dp"
-            android:layout_marginStart="@dimen/px_m_margin"
-            android:layout_marginEnd="@dimen/px_m_margin"
+            android:paddingStart="@dimen/px_m_margin"
+            android:paddingEnd="@dimen/px_m_margin"
             android:layout_weight="1">
 
             <com.mercadopago.android.px.internal.view.ElementDescriptorView
@@ -42,6 +44,8 @@
 
             <android.support.v7.widget.RecyclerView
                 android:id="@+id/recycler"
+                android:clipToPadding="false"
+                android:clipChildren="false"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
                 android:layout_width="match_parent" />

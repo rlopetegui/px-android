@@ -1,3 +1,18 @@
+## VERSION 4.33.1
+_29_01_2020_
+* FIX - Added header for terms and conditions
+* FIX - Reduce margins of MLBusinessDiscountBoxView in congrats.
+
+## VERSION 4.33.0
+_24_01_2020_
+* FEATURE - Added local behaviour
+* ENHANCEMENT - Summary detail animation on card form return
+* FIX - Sold out discount message alignment
+
+## VERSION 4.32.0
+_16_01_2020_
+* FEATURE - New card form
+
 ## VERSION 4.31.0
 _09_01_2020_
 * ENHANCEMENT - Added tracking behaviour to addons

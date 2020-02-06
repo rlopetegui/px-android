@@ -28,7 +28,7 @@ public class OtherPaymentMethodFragment
     extends BaseFragment<OtherPaymentMethodPresenter, OtherPaymentMethodFragmentItem>
     implements AddNewCard.View {
 
-    private static final String OLD_VERSION = "v11111";
+    private static final String OLD_VERSION = "v1";
 
     private View addNewCardView;
     private View offPaymentMethodView;

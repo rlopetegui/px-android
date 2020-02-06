@@ -17,10 +17,10 @@
         android:orientation="horizontal"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/amount">
+        app:layout_constraintEnd_toStartOf="@id/space">
 
         <com.mercadopago.android.px.internal.view.MPTextView
-            android:id="@+id/bottom_button_message"
+            android:id="@+id/label"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:ellipsize="end"
@@ -38,6 +38,14 @@
             tools:src="@drawable/px_helper"/>
     </LinearLayout>
 
+    <Space
+        android:id="@+id/space"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/title"
+        app:layout_constraintEnd_toStartOf="@id/amount"
+        />
+
     <com.mercadopago.android.px.internal.view.MPTextView
         android:id="@+id/amount"
         android:layout_width="wrap_content"
@@ -45,6 +53,6 @@
         android:textColor="@color/px_expressCheckoutTextColor"
         android:textSize="@dimen/px_s_text"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/space"
         tools:text="$124"/>
 </merge>

@@ -7,6 +7,7 @@ public final class PXBehaviourConfigurer {
     private SecurityBehaviour securityBehaviour;
     private ESCManagerBehaviour escManagerBehaviour;
     private TrackingBehaviour trackingBehaviour;
+    private LocaleBehaviour localeBehaviour;
 
     public PXBehaviourConfigurer with(@NonNull final ESCManagerBehaviour escManagerBehaviour) {
         this.escManagerBehaviour = escManagerBehaviour;
@@ -23,9 +24,15 @@ public final class PXBehaviourConfigurer {
         return this;
     }
 
+    public PXBehaviourConfigurer with(@NonNull final LocaleBehaviour localeBehaviour) {
+        this.localeBehaviour = localeBehaviour;
+        return this;
+    }
+
     public void configure() {
         BehaviourProvider.set(securityBehaviour);
         BehaviourProvider.set(escManagerBehaviour);
         BehaviourProvider.set(trackingBehaviour);
+        BehaviourProvider.set(localeBehaviour);
     }
 }

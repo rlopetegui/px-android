@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.webkit.URLUtil;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import com.mercadopago.android.px.BuildConfig;
 import com.mercadopago.android.px.R;
 import com.mercadopago.android.px.internal.base.PXActivity;
 import com.mercadopago.android.px.tracking.internal.views.TermsAndConditionsViewTracker;
@@ -69,6 +70,7 @@ public class TermsAndConditionsActivity extends PXActivity {
         });
 
         if (URLUtil.isValidUrl(data)) {
+            mTermsAndConditionsWebView.getSettings().setUserAgentString("MercadoLibre-Android/"+ BuildConfig.VERSION_NAME);
             mTermsAndConditionsWebView.loadUrl(data);
         } else {
             mTermsAndConditionsWebView.loadData(data, "text/html", "UTF-8");

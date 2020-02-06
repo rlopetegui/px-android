@@ -33,10 +33,10 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/px_s_margin"
-        android:layout_marginRight="@dimen/px_l_margin"
-        android:layout_marginEnd="@dimen/px_l_margin"
-        android:layout_marginLeft="@dimen/px_l_margin"
-        android:layout_marginStart="@dimen/px_l_margin"/>
+        android:layout_marginRight="@dimen/px_s_margin"
+        android:layout_marginEnd="@dimen/px_s_margin"
+        android:layout_marginLeft="@dimen/px_s_margin"
+        android:layout_marginStart="@dimen/px_s_margin"/>
 
     <com.mercadolibre.android.ui.widgets.MeliButton
         android:id="@+id/showAllDiscounts"

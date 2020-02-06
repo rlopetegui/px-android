@@ -13,7 +13,7 @@
         android:orientation="horizontal">
 
         <com.mercadopago.android.px.internal.view.MPTextView
-            android:id="@+id/bottom_button_message"
+            android:id="@+id/label"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"

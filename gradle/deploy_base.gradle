@@ -1,24 +1,18 @@
-import org.gradle.internal.jvm.Jvm
-
 apply plugin:'maven'
 apply plugin:'signing'
 apply plugin:'maven-publish'
 apply plugin:'com.jfrog.bintray'
 apply plugin:'com.github.dcendents.android-maven'
 
-def versionToDeploy = version_to_deploy as String
-versionToDeploy = project.hasProperty('production') ? versionToDeploy : 'EXPERIMENTAL-' + versionToDeploy + '-' + dateNow
-version = versionToDeploy
+def versionLocation = "build/last_deployed_version.txt"
+version = project.hasProperty('production') ? version_to_deploy :
+    "EXPERIMENTAL-${version_to_deploy}-${dateNow}"
 
 task javadoc(type:Javadoc) {
     failOnError = false
     options.encoding = 'UTF-8'
     source = android.sourceSets.main.java.srcDirs
     classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-    // JDK 1.8 is more strict than 1.7. This makes JDK 1.8 behave like 1.7 for javadoc
-    if (Jvm.current().getJavaVersion().isJava8Compatible()) {
-        options.addStringOption('Xdoclint:none', '-quiet')
-    }
     exclude '**/BuildConfig.java'
     exclude '**/R.java'
     exclude '**/internal/**'
@@ -34,20 +28,35 @@ task androidSourcesJar(type:Jar) {
     from android.sourceSets.main.java.sourceFiles
 }
 
-task publishAar(dependsOn: bintrayUpload) {
+task publishAar {
+    dependsOn bintrayUpload
+
     doLast {
-        println "Deployed ${project.name} version: ${versionToDeploy}"
+        println "Deployed ${project.name} version: ${version}"
+        file(versionLocation).text = version
     }
 }
 
-task publishLocal(dependsOn: publishToMavenLocal) {
+task publishLocalInit {
     doLast {
-        println "Deployed ${project.name} version: ${versionToDeploy}"
+        version = "LOCAL-${version_to_deploy}-${dateNow}"
     }
 }
 
-afterEvaluate {
-    javadoc.classpath += project.android.libraryVariants.toList().first().javaCompile.classpath
+task publishLocal {
+    publishToMavenLocal.mustRunAfter(publishLocalInit)
+    dependsOn publishToMavenLocal, publishLocalInit
+
+    doLast {
+        println "Deployed ${project.name} version: ${version}"
+        file(versionLocation).text = version
+    }
+}
+
+task printLastVersion {
+    doLast {
+        println file(versionLocation).text
+    }
 }
 
 artifacts {
@@ -85,31 +94,30 @@ install {
                 }
                 developers {
                     developer {
-                        id 'valeria.serber'
-                        name 'Valeria Serber'
-                        email 'valeria.serber@mercadolibre.com'
+                        id 'agustinmantuano'
+                        name 'Agustin Mantuano'
+                        email 'agustin.mantuano@mercadolibre.com'
                     }
                     developer {
-                        id 'angeles.arlanti'
-                        name 'Maria De Los Angeles Arlanti'
-                        email 'angeles.arlanti@mercadolibre.com'
+                        id 'george29'
+                        name 'Jorge Gonzalez'
+                        email 'jorge.gonzalez@mercadolibre.com'
                     }
                     developer {
-                        id 'matias.romar'
+                        id 'matiasromar'
                         name 'Matias Romar'
                         email 'matias.romar@mercadolibre.com'
                     }
                     developer {
-                        id 'lucas.bais'
-                        name 'Lucas Bais'
-                        email 'lucas.bais@mercadolibre.com'
+                        id 'cgaggino'
+                        name 'Cristian Gaggino'
+                        email 'cristian.gaggino@mercadolibre.com'
                     }
                 }
                 scm {
                     connection gitUrl
                     developerConnection gitUrl
                     url siteUrl
-
                 }
             }
         }
@@ -117,7 +125,6 @@ install {
 }
 
 bintray {
-    version = versionToDeploy
     user = "$System.env.BINTRAY_USER"
     key = "$System.env.BINTRAY_API_KEY"
 
@@ -135,9 +142,9 @@ bintray {
         publish = true
         publicDownloadNumbers = true
         version {
-            name = versionToDeploy
+            name = this.version
             desc = libraryDescription
-            vcsTag = versionToDeploy
+            vcsTag = this.version
             released = project.hasProperty('production') ? new Date() : null
         }
     }
@@ -148,7 +155,6 @@ publishing {
     publications {
         aar(MavenPublication) {
             groupId group
-            version = versionToDeploy
             artifactId artifactLib
             artifact("$buildDir/outputs/aar/${artifactLib}-release.aar") {
                 builtBy assemble

@@ -6,8 +6,8 @@
     android:duration="@integer/px_card_form_animation_time">
 
     <translate
-        android:fromXDelta="-100%"
-        android:toXDelta="0%" />
+        android:fromXDelta="-50%p"
+        android:toXDelta="0%p" />
 
     <alpha
         android:fromAlpha="0.0"

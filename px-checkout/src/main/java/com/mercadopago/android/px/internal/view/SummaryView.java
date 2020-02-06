@@ -25,9 +25,9 @@ public class SummaryView extends FrameLayout {
     @NonNull private final AmountDescriptorView totalAmountDescriptor;
     @NonNull private final ElementDescriptorView toolbarElementDescriptor;
     @NonNull private final FrameLayout itemsContainer;
-    private final DetailAdapter detailAdapter;
+    /* default */ final DetailAdapter detailAdapter;
 
-    private final RecyclerView detailRecyclerView;
+    /* default */ final RecyclerView detailRecyclerView;
     @Nullable private OnMeasureListener measureListener;
 
     private final Animation toolbarAppearAnimation;
@@ -38,7 +38,7 @@ public class SummaryView extends FrameLayout {
     private final Animation slideDownIn;
 
     private boolean showingBigLogo = false;
-    private boolean animating = false;
+    /* default */ boolean animating = false;
     private int maxElementsToShow;
     private boolean shouldAnimateReturnFromCardForm = false;
 
@@ -113,50 +113,56 @@ public class SummaryView extends FrameLayout {
         toolbarElementDescriptor.setVisibility(VISIBLE);
     }
 
-    public void animateEnter() {
+    public void animateEnter(final int duration) {
         shouldAnimateReturnFromCardForm = true;
-        final int duration = getResources().getInteger(R.integer.cf_anim_duration);
+        detailAdapter.customAnimation = true;
 
-        final View container = findViewById(R.id.container);
-        final Animation translateAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.px_summary_translate_in);
-        container.startAnimation(translateAnimation);
+        findViewById(R.id.container).startAnimation(
+            AnimationUtils.loadAnimation(getContext(), R.anim.px_summary_translate_in));
 
         final Animation fadeIn = AnimationUtils.loadAnimation(getContext(), R.anim.px_fade_in);
         fadeIn.setStartOffset(duration);
         fadeIn.setDuration(duration);
+        fadeIn.setAnimationListener(new Animation.AnimationListener() {
+            @Override
+            public void onAnimationStart(final Animation animation) {
+
+            }
+
+            @Override
+            public void onAnimationEnd(final Animation animation) {
+                detailAdapter.customAnimation = false;
+            }
+
+            @Override
+            public void onAnimationRepeat(final Animation animation) {
+
+            }
+        });
         findViewById(R.id.separator).startAnimation(fadeIn);
 
-        final View totalLabel = totalAmountDescriptor.findViewById(R.id.title);
-        final View amountLabel = totalAmountDescriptor.findViewById(R.id.amount);
-        final Animation slideLeft = AnimationUtils.loadAnimation(getContext(), R.anim.px_summary_slide_left_in);
-        final Animation slideRight = AnimationUtils.loadAnimation(getContext(), R.anim.px_summary_slide_right_in);
-        totalLabel.startAnimation(slideRight);
-        amountLabel.startAnimation(slideLeft);
+        totalAmountDescriptor.animateEnter();
     }
 
-    public void animateExit() {
-        final int duration = getResources().getInteger(R.integer.cf_anim_duration);
-
-        final Animation slideUp = AnimationUtils.loadAnimation(getContext(), R.anim.px_summary_slide_up_out);
+    public void animateExit(final int duration) {
         final Animation fadeOut = AnimationUtils.loadAnimation(getContext(), R.anim.px_fade_out);
         fadeOut.setDuration(duration);
 
         if (showingBigLogo) {
             bigHeaderDescriptor.startAnimation(fadeOut);
         } else {
-            toolbarElementDescriptor.startAnimation(slideUp);
+            toolbarElementDescriptor.startAnimation(
+                AnimationUtils.loadAnimation(getContext(), R.anim.px_summary_slide_up_out));
         }
+
         detailRecyclerView.startAnimation(fadeOut);
+
         findViewById(R.id.separator).startAnimation(fadeOut);
 
-        final View totalLabel = totalAmountDescriptor.findViewById(R.id.title);
-        final View amountLabel = totalAmountDescriptor.findViewById(R.id.amount);
-        totalLabel.startAnimation(fadeOut);
-        amountLabel.startAnimation(fadeOut);
+        findViewById(R.id.container).startAnimation(
+            AnimationUtils.loadAnimation(getContext(), R.anim.px_summary_translate_out));
 
-        final View container = findViewById(R.id.container);
-        final Animation translateAnimation = AnimationUtils.loadAnimation(getContext(), R.anim.px_summary_translate_out);
-        container.startAnimation(translateAnimation);
+        totalAmountDescriptor.startAnimation(fadeOut);
     }
 
     public void animateElementList(final float positionOffset) {
@@ -271,15 +277,19 @@ public class SummaryView extends FrameLayout {
     /* default */ static final class DetailAdapter extends RecyclerView.Adapter<AmountViewHolder> {
         @NonNull private List<AmountDescriptorView.Model> items;
 
+        /* default */ boolean customAnimation = false;
+
         /* default */ DetailAdapter() {
             items = new ArrayList<>();
         }
 
         @Override
         public AmountViewHolder onCreateViewHolder(final ViewGroup parent, final int viewType) {
-            final View view =
-                LayoutInflater.from(parent.getContext())
-                    .inflate(R.layout.px_viewholder_amountdescription, parent, false);
+            final AmountDescriptorView view = (AmountDescriptorView) LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.px_viewholder_amountdescription, parent, false);
+            if (customAnimation) {
+                view.animateEnter();
+            }
             return new AmountViewHolder(view);
         }
 
@@ -293,7 +303,7 @@ public class SummaryView extends FrameLayout {
             return items.size();
         }
 
-        public void updateItems(@NonNull final List<AmountDescriptorView.Model> items) {
+        /* default */ void updateItems(@NonNull final List<AmountDescriptorView.Model> items) {
             this.items = items;
             notifyDataSetChanged();
         }
@@ -303,12 +313,12 @@ public class SummaryView extends FrameLayout {
 
         private final AmountDescriptorView amountDescView;
 
-        public AmountViewHolder(final View itemView) {
-            super(itemView);
-            amountDescView = (AmountDescriptorView) itemView;
+        /* default */ AmountViewHolder(@NonNull final AmountDescriptorView amountDescView) {
+            super(amountDescView);
+            this.amountDescView = amountDescView;
         }
 
-        public void populate(@NonNull final AmountDescriptorView.Model model) {
+        /* default */ void populate(@NonNull final AmountDescriptorView.Model model) {
             amountDescView.update(model);
         }
     }

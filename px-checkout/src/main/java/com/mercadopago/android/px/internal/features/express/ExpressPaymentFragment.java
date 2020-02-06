@@ -178,7 +178,7 @@ public class ExpressPaymentFragment extends Fragment implements ExpressPayment.V
                 indicator.startAnimation(fadeIn);
                 confirmButton.startAnimation(slideUp);
 
-                summaryView.animateEnter();
+                summaryView.animateEnter(duration);
             } else {
                 final Animation slideDown =
                     AnimationUtils.loadAnimation(getContext(), R.anim.px_summary_slide_down_out);
@@ -192,7 +192,7 @@ public class ExpressPaymentFragment extends Fragment implements ExpressPayment.V
                 indicator.startAnimation(fadeOut);
                 confirmButton.startAnimation(slideDown);
 
-                summaryView.animateExit();
+                summaryView.animateExit(offset);
             }
         }
         return super.onCreateAnimation(transit, enter, nextAnim);

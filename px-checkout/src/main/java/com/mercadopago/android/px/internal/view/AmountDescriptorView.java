@@ -8,6 +8,8 @@ import android.text.SpannableStringBuilder;
 import android.util.AttributeSet;
 import android.util.TypedValue;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.mercadopago.android.px.R;
@@ -26,6 +28,7 @@ import static com.mercadopago.android.px.internal.util.TextUtil.isEmpty;
 public class AmountDescriptorView extends ConstraintLayout {
 
     private MPTextView leftLabel;
+    private View leftContainer;
     private TextView rightLabel;
     private ImageView imageView;
     private boolean rightLabelSemiBold;
@@ -57,9 +60,17 @@ public class AmountDescriptorView extends ConstraintLayout {
 
     private void init() {
         inflate(getContext(), R.layout.px_view_amount_descriptor, this);
-        leftLabel = findViewById(R.id.bottom_button_message);
+        leftContainer = findViewById(R.id.title);
+        leftLabel = leftContainer.findViewById(R.id.label);
         rightLabel = findViewById(R.id.amount);
         imageView = findViewById(R.id.icon_descriptor_amount);
+    }
+
+    public void animateEnter() {
+        final Animation slideLeft = AnimationUtils.loadAnimation(getContext(), R.anim.px_summary_slide_left_in);
+        final Animation slideRight = AnimationUtils.loadAnimation(getContext(), R.anim.px_summary_slide_right_in);
+        leftContainer.startAnimation(slideRight);
+        rightLabel.startAnimation(slideLeft);
     }
 
     public void update(@NonNull final AmountDescriptorView.Model model) {
